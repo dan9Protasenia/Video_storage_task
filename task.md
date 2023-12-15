@@ -26,8 +26,8 @@ Write `GitHub Actions` pipelines for running tests in pull requests, which will 
 4. **Dockerization:**
     - Dockerize the entire application.
     - Use containers for the application, `PostgreSQL` databases, `Redis`.
-    - Keep Docker images as light as you can.
     - Explore using `Docker Compose` for containerization in a local development environment.
+    - Read about `Multi-stage` and keep your `Docker` images as light as you can.
 
 5. **Database Integration:**
    - Integrate `PostgreSQL` as the main database for storing video data.
@@ -61,8 +61,8 @@ Write `GitHub Actions` pipelines for running tests in pull requests, which will 
 
 12. **Unit Tests and Integration Tests:**
     - Use `Pytest` and `Coverage` libs.
-    - Write unit tests for any function or method.
-    - Write integration tests to check full application logic.
+    - Write `unit tests` for any function or method.
+    - Write `integration tests` to check full application logic.
     - Ensure all tests run using `Docker Compose` to simulate the entire application environment.
 
 13. **GitHub Actions:**
@@ -91,7 +91,7 @@ Write `GitHub Actions` pipelines for running tests in pull requests, which will 
     - Extend authentication to include user accounts with _roles_ (admin, regular user).
 
 5. **User Roles:**
-    - Add user roles such as admin (able to do everything), manager (update videos), user (only get videos).
+    - Add user _roles_ such as _admin_ (able to do everything), _manager_ (update videos), _user_ (only get videos).
 
 6. **Cache:**
     - Try to think of a way to use `Redis`.
@@ -108,50 +108,52 @@ Write `GitHub Actions` pipelines for running tests in pull requests, which will 
     + Count of lines after import should be 2.
     + The rest is by specification.
 - `Pytest` and `Coverage` configs also should be in in the `tool` section of the _pyproject.toml_.
-- Commit style, [click](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/). Commits should contain small logical portions of the code being modified. A clear commit name is required, descriptions within commits are welcome.
-- Branch style, [click](https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf#:~:text=own%20development%20cycle.-,Git%20Flow,-The%20Git%20Flow). Don't forget to delete merged or close branches based on PR status. Development should be done in separate branches, it is not allowed to commit or merge changes directly into _master_ or _develop_.
+- Commit style, [click](https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/). Commits should contain small logical portions of the code being modified. A clear commit name is required, descriptions within commits are welcome. The commit header should be up to 50 characters and the description up to 72 characters, [read more](https://stackoverflow.com/questions/2290016/git-commit-messages-50-72-formatting).
+- Branch style, [click](https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf#:~:text=own%20development%20cycle.-,Git%20Flow,-The%20Git%20Flow). It is suggested to use GitFlow. Don't forget to delete merged or close branches based on PR status. Development should be done in separate branches, it is not allowed to commit or merge changes directly into _master_ or _develop_.
 - Commits, branches and PR's should contain small pieces of separate logic so that it can be revisited. For example, how to decompose and get started (documentation should also be updated and up to date):
   + The first PR would be enough to see poetry installed and a project structure created with a basic fastapi initialization and a first test that verifies that endpoint returns a response.
   + The second PR can only include linters.
   + The third PR involves the use of docker.
-- Submit the codebase along with a detailed README explaining how to set up and run the monolithic application, any additional features implemented, and any challenges faced.
+- Try to follow all [OOP](https://realpython.com/python3-object-oriented-programming/) & [design](https://www.boldare.com/blog/kiss-yagni-dry-principles/) principles.
+- Submit the codebase along with a detailed README explaining how to set up and run the monolithic application, any additional features implemented, and any challenges faced. [Here is](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) a good cheat-list how to style documentation.
+- Fork this repository and do your development there.
 
 
 ### Note:
 - Use Python 3.10 or above.
-- Follow best practices in terms of code readability, structure, and documentation.
 - Feel free to use any additional libraries or tools you find suitable for the task.
-- You can draw the _database_ schema and _application_ schema [here](https://app.diagrams.net/).
+- You can draw the _database_ schemas and _application_ schemas [here](https://app.diagrams.net/).
 - FastAPI best practices [one](https://github.com/zhanymkanov/fastapi-best-practices), [two](https://github.com/Tishka17/fastapi-template/tree/master/src/app) (look how to use protocols).
 - Try decomposing tasks into chunks and branches as described above.
-- All `highlighted` words can be read in the documentation or familiarized with what they are.
+- All `highlighted` words should be read in the documentation or familiarized with what they are.
+- Follow best practices in terms of code readability, structure, and documentation.
 
 
 ### Suggested project structure:
 ```
 .
-├── .github
-│   └── workflows
+├── .github/
+│   └── workflows/
 │       └── test.yaml
-├── src
-│   ├── app
-│   │   ├── api
-│   │   │   ├── user
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── user/
 │   │   │   │   ├── __init__.py
 │   │   │   │   ├── router.py
 │   │   │   │   ├── service.py
 │   │   │   │   └── views.py
 │   │   │   ├── __init__.py
 │   │   │   └── web.py
-│   │   ├── core
-│   │   │   ├── protocols
+│   │   ├── core/
+│   │   │   ├── protocols/
 │   │   │   │   └── __init__.py
-│   │   │   ├── schemas
+│   │   │   ├── schemas/
 │   │   │   │   └── __init__.py
 │   │   │   └── __init__.py
-│   │   ├── infrastructure
-│   │   │   ├── database
-│   │   │   │   ├── models
+│   │   ├── infrastructure/
+│   │   │   ├── database/
+│   │   │   │   ├── models/
 │   │   │   │   │   └── __init__.py
 │   │   │   │   ├── __init__.py
 │   │   │   │   └── postgres.py
@@ -159,17 +161,17 @@ Write `GitHub Actions` pipelines for running tests in pull requests, which will 
 │   │   │   └── config_loader.py
 │   │   ├── __init__.py
 │   │   └── main.py
-│   ├── templates
+│   ├── templates/
 │   │   └── README.md
 │   ├── Dockerfile
 │   ├── README.md
 │   └── __init__.py
-├── tests
-│   ├── fixtures
+├── tests/
+│   ├── fixtures/
 │   │   └── __init__.py
-│   ├── integration
+│   ├── integration/
 │   │   └── __init__.py
-│   ├── unit
+│   ├── unit/
 │   │   └── __init__.py
 │   ├── .env.test
 │   ├── Dockerfile
