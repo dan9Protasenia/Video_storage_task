@@ -1,15 +1,35 @@
 from fastapi import APIRouter, File, UploadFile
-
-from src.app.infrastructure.minio.minio_client import get_minio_client
+from .views import (
+    upload_video_logic,
+    get_video_logic,
+    update_video_logic,
+    delete_video_logic,
+    list_videos_logic
+)
 
 router = APIRouter()
 
 
 @router.post("/upload-video/")
 async def upload_video(video: UploadFile = File(...)):
-    s3_client = get_minio_client()
-    content = await video.read()
-    bucket_name = "video"
-    file_name = video.filename
-    response = s3_client.put_object(Bucket=bucket_name, Key=file_name, Body=content)
-    return {"message": "Video uploaded successfully", "response": response}
+    return await upload_video_logic(video, bucket_name="video")
+
+
+@router.get("/{file_name}")
+async def get_video(file_name: str):
+    return await get_video_logic(file_name, bucket_name="video")
+
+
+@router.put("/{old_file_name}")
+async def update_video(old_file_name: str, video: UploadFile = File(...)):
+    return await update_video_logic(old_file_name, video, bucket_name="video")
+
+
+@router.delete("/{file_name}")
+async def delete_video(file_name: str):
+    return await delete_video_logic(file_name, bucket_name="video")
+
+
+@router.get("/")
+async def list_videos():
+    return await list_videos_logic(bucket_name="video")
