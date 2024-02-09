@@ -39,4 +39,4 @@ COPY src ./src
 
 EXPOSE 8000
 
-CMD ["uvicorn", "src.app.main:app", "--host", "127.0.0.1", "--port", "8000/docs"]
+CMD ["uvicorn", "src.app.main:app", "--host", "127.0.0.1", "--port", "8000"]
