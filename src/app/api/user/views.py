@@ -1,5 +1,6 @@
 from fastapi import HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
+
 from src.app.infrastructure.minio.minio_client import get_minio_client
 
 
@@ -15,7 +16,7 @@ async def get_video_logic(file_name: str, bucket_name: str):
     s3_client = get_minio_client()
     try:
         response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
-        return StreamingResponse(response['Body'], media_type="video/mp4")
+        return StreamingResponse(response["Body"], media_type="video/mp4")
     except s3_client.exceptions.NoSuchKey:
         raise HTTPException(status_code=404, detail="Video not found")
 
@@ -46,7 +47,7 @@ async def list_videos_logic(bucket_name: str):
     s3_client = get_minio_client()
     try:
         response = s3_client.list_objects(Bucket=bucket_name)
-        videos = [obj['Key'] for obj in response.get('Contents', [])]
+        videos = [obj["Key"] for obj in response.get("Contents", [])]
         return {"videos": videos}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
