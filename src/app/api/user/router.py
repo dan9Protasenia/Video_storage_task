@@ -1,11 +1,6 @@
 from fastapi import APIRouter, File, UploadFile
-from .views import (
-    upload_video_logic,
-    get_video_logic,
-    update_video_logic,
-    delete_video_logic,
-    list_videos_logic
-)
+
+from .views import delete_video_logic, get_video_logic, list_videos_logic, update_video_logic, upload_video_logic
 
 router = APIRouter()
 
