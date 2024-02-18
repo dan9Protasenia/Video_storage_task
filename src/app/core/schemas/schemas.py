@@ -7,6 +7,10 @@ class Video(BaseModel):
     description: str
     file_path: str
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
 
 class User(BaseModel):
     id: int
