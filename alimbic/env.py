@@ -14,13 +14,23 @@ engine = create_engine(config.get_main_option("sqlalchemy.url"), poolclass=pool.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+from sqlalchemy import MetaData
+
+from src.app.infrastructure.database.models.user_model import UserModel
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from src.app.infrastructure.database.models.postgres import VideoModel as mymodel
+from src.app.infrastructure.database.models.video_model import VideoModel
 
-target_metadata = mymodel.metadata
+combined_metadata = MetaData()
+
+for model in [VideoModel, UserModel]:
+    for table in model.metadata.tables.values():
+        combined_metadata._add_table(table.name, table.schema, table)
+
+target_metadata = combined_metadata
 
 
 # other values from the config, defined by the needs of env.py,

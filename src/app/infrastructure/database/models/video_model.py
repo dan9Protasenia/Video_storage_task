@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+from src.app.infrastructure.database.models.base import Base
 
 
 class VideoModel(Base):
