@@ -1,8 +1,10 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
 class Video(BaseModel):
-    id: int
+    id: Optional[int] = None
     title: str
     description: str
     file_path: str
@@ -17,3 +19,12 @@ class User(BaseModel):
     username: str
     email: str
     is_active: bool
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
