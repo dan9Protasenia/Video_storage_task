@@ -2,8 +2,8 @@ from fastapi import Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.api.user.service import VideoService
-from src.app.core.schemas.schemas import Video
-from src.app.infrastructure.database.database import get_db
+from src.app.core.schemas.video import Video
+from src.app.infrastructure.database.postgres import get_db
 
 
 async def upload_video_view(

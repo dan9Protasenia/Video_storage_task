@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import StreamingResponse
 
 from src.app.core.handlers.errors import InternalServerError, UserNotFoundError
-from src.app.core.schemas.schemas import Video
+from src.app.core.modules.minio.minio_client import get_minio_client
+from src.app.core.schemas.video import Video
 from src.app.infrastructure.database.models.video_model import VideoModel
-from src.app.infrastructure.minio.minio_client import get_minio_client
 
 
 class VideoService:

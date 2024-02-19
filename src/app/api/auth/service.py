@@ -3,9 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from src.app.core.handlers.errors import AuthError, RegError
-from src.app.core.schemas.schemas import Token, User
+from src.app.core.modules.auth import create_access_token, get_password_hash, verify_password
+from src.app.core.schemas.token import Token
+from src.app.core.schemas.user import User
 from src.app.infrastructure.database.models.user_model import UserModel
-from src.app.security.auth import create_access_token, get_password_hash, verify_password
 
 
 class AuthService:

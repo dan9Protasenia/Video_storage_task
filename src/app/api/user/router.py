@@ -9,7 +9,7 @@ from src.app.api.user.views import (
     upload_video_view,
 )
 from src.app.core.modules.security import get_current_user
-from src.app.core.schemas.schemas import Video
+from src.app.core.schemas.video import Video
 
 router = APIRouter()
 

@@ -4,11 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from src.app.core.handlers.errors import AuthError, ConflictError, UserNotFoundError
-from src.app.infrastructure.database.database import get_db
+from src.app.core.modules import auth
 from src.app.infrastructure.database.models.user_model import UserModel
-from src.app.security import auth
+from src.app.infrastructure.database.postgres import get_db
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 async def get_current_user(db: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)):

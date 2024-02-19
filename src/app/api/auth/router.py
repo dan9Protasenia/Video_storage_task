@@ -2,7 +2,8 @@ from fastapi import APIRouter
 from starlette import status
 
 from src.app.api.auth.views import login_user, register_user
-from src.app.core.schemas.schemas import Token, User
+from src.app.core.schemas.token import Token
+from src.app.core.schemas.user import User
 
 router = APIRouter()
 

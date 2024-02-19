@@ -3,8 +3,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.api.auth.service import AuthService
-from src.app.core.schemas.schemas import Token, User
-from src.app.infrastructure.database.database import get_db
+from src.app.core.schemas.token import Token
+from src.app.core.schemas.user import User
+from src.app.infrastructure.database.postgres import get_db
 
 
 async def register_user(username: str, email: str, password: str, db: AsyncSession = Depends(get_db)) -> User:
