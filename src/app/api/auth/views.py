@@ -1,13 +1,17 @@
-from sqlalchemy.orm import Session
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.app.infrastructure.database.models.user_model import UserModel
-from src.app.security.auth import get_password_hash
+from src.app.api.auth.service import AuthService
+from src.app.core.schemas.schemas import Token, User
+from src.app.infrastructure.database.database import get_db
 
 
-async def create_user(username: str, email: str, password: str, db: Session):
-    hashed_password = get_password_hash(password)
-    user = UserModel(username=username, email=email, hashed_password=hashed_password, is_active=True)
-    db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    return user
+async def register_user(username: str, email: str, password: str, db: AsyncSession = Depends(get_db)) -> User:
+    auth_service = AuthService(db)
+    return await auth_service.register(username, email, password)
+
+
+async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)) -> Token:
+    auth_service = AuthService(db)
+    return await auth_service.login(form_data.username, form_data.password)
