@@ -4,6 +4,8 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+from src.app.core.handlers.errors import AuthError
+
 SECRET_KEY = "YOUR_SECRET_KEY"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -22,15 +24,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def verify_token(token: str, credentials_exception):
+def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise credentials_exception
+            raise AuthError(detail="User not found.")
         return username
     except JWTError:
-        raise credentials_exception
+        raise AuthError(detail="User not found.")
 
 
 def get_password_hash(password):
