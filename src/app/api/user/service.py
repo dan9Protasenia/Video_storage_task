@@ -32,7 +32,7 @@ class VideoService:
             video_info = result.scalars().first()
 
             if not video_info:
-                raise UserNotFoundError(detail="Video not found")
+                raise UserNotFoundError("Video not found")
 
             return Video(
                 id=video_info.id,
@@ -41,14 +41,14 @@ class VideoService:
                 file_path=video_info.file_path,
             )
         except self.s3_client.exceptions.NoSuchKey:
-            raise UserNotFoundError(detail="Video file not found in S3")
+            raise UserNotFoundError("Video file not found in S3")
 
     async def get_video_content(self, file_path: str, bucket_name: str):
         try:
             response = self.s3_client.get_object(Bucket=bucket_name, Key=file_path)
             return StreamingResponse(response["Body"], media_type="video/mp4")
         except self.s3_client.exceptions.NoSuchKey:
-            raise UserNotFoundError(detail="Video file not found in S3")
+            raise UserNotFoundError("Video file not found in S3")
 
     async def update_video(self, old_file_name: str, video: UploadFile, bucket_name: str) -> dict:
         new_file_name = video.filename
@@ -58,14 +58,14 @@ class VideoService:
             self.s3_client.put_object(Bucket=bucket_name, Key=new_file_name, Body=content)
             return {"message": "Video updated successfully", "new_file_name": new_file_name}
         except Exception as e:
-            raise InternalServerError(detail=str(e))
+            raise InternalServerError(str(e))
 
     async def delete_video(self, file_name: str, bucket_name: str) -> dict:
         try:
             self.s3_client.delete_object(Bucket=bucket_name, Key=file_name)
             return {"message": "Video deleted successfully"}
         except Exception as e:
-            raise InternalServerError(detail=str(e))
+            raise InternalServerError(str(e))
 
     async def list_videos(self, bucket_name: str) -> list[Video]:
         try:
@@ -77,4 +77,4 @@ class VideoService:
             return video_models
         except Exception as e:
 
-            raise InternalServerError(detail=str(e))
+            raise InternalServerError(str(e))
