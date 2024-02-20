@@ -13,6 +13,12 @@ AsyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine,
 
 
 async def get_db():
+    """
+        Database dependency for FastAPI routes.
+
+        This is an asynchronous generator that yields a SQLAlchemy session wrapped in a transaction.
+
+        """
     async with AsyncSessionLocal() as session:
         try:
             yield session
@@ -21,4 +27,4 @@ async def get_db():
         except Exception as e:
             await session.rollback()
 
-            raise InternalServerError(detail=str(e))
+            raise InternalServerError(str(e))
