@@ -39,6 +39,5 @@ async def reg_error_handler(request: Request, exc: Exception):
 async def server_error(request: Request, exc: Exception):
     exc = InternalServerError(str(exc))
     return JSONResponse(
-
         content={"message": exc.message},
     )
