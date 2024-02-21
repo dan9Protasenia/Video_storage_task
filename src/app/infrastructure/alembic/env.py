@@ -1,7 +1,9 @@
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import create_engine, engine_from_config, pool
+from sqlalchemy import MetaData, create_engine, engine_from_config, pool
+
+from src.app.infrastructure.database.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,15 +16,11 @@ engine = create_engine(config.get_main_option("sqlalchemy.url"), poolclass=pool.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from sqlalchemy import MetaData
-
-from src.app.infrastructure.database.models.user_model import UserModel
-
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from src.app.infrastructure.database.models.video_model import VideoModel
+
 
 combined_metadata = MetaData()
 

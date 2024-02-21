@@ -1,62 +1,72 @@
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
-from sqlalchemy.future import select
+from fastapi import APIRouter, Depends
 
-from src.app.api.auth.dependencies import get_current_user
 from src.app.api.user.views import (
-    delete_video_logic,
-    get_video_logic,
-    list_videos_logic,
-    update_video_logic,
-    upload_video_logic,
+    delete_video_view,
+    get_video_content_view,
+    get_video_info_view,
+    list_videos_view,
+    update_video_view,
+    upload_video_view,
 )
-from src.app.infrastructure.database.database import AsyncSession, get_db
-from src.app.infrastructure.database.models.user_model import UserModel
-from src.app.infrastructure.database.models.video_model import VideoModel
+from src.app.core.modules.security.dependencies import get_current_user
+from src.app.core.schemas.video import Video
 
 router = APIRouter()
 
+router.add_api_route(
+    path="/upload-video/",
+    endpoint=upload_video_view,
+    methods=["POST"],
+    response_model=Video,
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="Upload a new video",
+)
 
-@router.post("/upload-video/")
-async def upload_video(
-    title: str = Form(...),
-    description: str = Form(...),
-    video: UploadFile = File(...),
-    db: AsyncSession = Depends(get_db),
-    current_user: UserModel = Depends(get_current_user),
-):
-    return await upload_video_logic(video=video, title=title, description=description, bucket_name="video", db=db)
+router.add_api_route(
+    path="/video-info/{file_path}",
+    endpoint=get_video_info_view,
+    methods=["GET"],
+    response_model=Video,
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="Get a video info",
+)
 
+router.add_api_route(
+    path="/{file_path}",
+    endpoint=get_video_content_view,
+    methods=["GET"],
+    response_model=None,
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="Get a specific video",
+)
 
-@router.get("/{file_path}")
-async def get_video(
-    file_path: str,
-    db: AsyncSession = Depends(get_db),
-    current_user: UserModel = Depends(get_current_user),
-):
-    result = await db.execute(select(VideoModel).where(VideoModel.file_path == file_path))
-    video = result.scalars().first()
-    if video is None:
-        raise HTTPException(status_code=404, detail="Video not found")
-    return video
+router.add_api_route(
+    path="/{old_file_name}",
+    endpoint=update_video_view,
+    methods=["PUT"],
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="Update an existing video",
+)
 
+router.add_api_route(
+    path="/{file_name}",
+    endpoint=delete_video_view,
+    methods=["DELETE"],
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="Delete a video",
+)
 
-@router.put("/{old_file_name}")
-async def update_video(
-    old_file_name: str,
-    video: UploadFile = File(...),
-    current_user: UserModel = Depends(get_current_user),
-):
-    return await update_video_logic(old_file_name, video, bucket_name="video")
-
-
-@router.delete("/{file_name}")
-async def delete_video(
-    file_name: str,
-    current_user: UserModel = Depends(get_current_user),
-):
-    return await delete_video_logic(file_name, bucket_name="video")
-
-
-@router.get("/")
-async def list_videos():
-    return await list_videos_logic(bucket_name="video")
+router.add_api_route(
+    path="/videos/",
+    endpoint=list_videos_view,
+    methods=["GET"],
+    response_model=list[Video],
+    status_code=200,
+    dependencies=[Depends(get_current_user)],
+    description="List all videos",
+)

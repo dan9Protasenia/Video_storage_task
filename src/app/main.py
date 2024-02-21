@@ -1,11 +1,8 @@
-from fastapi import FastAPI
+import uvicorn
 
-from src.app.api.auth.router import router as auth_router
-from src.app.api.user.router import router as video_router
-from src.app.api.web import router as home_router
+from src.app.startup import create_app
 
-app = FastAPI()
+app = create_app()
 
-app.include_router(video_router, prefix="/video", tags=["video"])
-app.include_router(home_router, prefix="", tags=["home"])
-app.include_router(auth_router, prefix="", tags=["auth"])
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

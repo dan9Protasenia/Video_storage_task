@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from src.app.infrastructure.database.models.base import Base
+from .base import Base
 
 
 class VideoModel(Base):

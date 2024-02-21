@@ -2,13 +2,12 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+
+from src.app.core.handlers.errors import AuthError
 
 SECRET_KEY = "YOUR_SECRET_KEY"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -22,20 +21,12 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def verify_token(token: str, credentials_exception):
+def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise credentials_exception
+            raise AuthError(detail="User not found.")
         return username
     except JWTError:
-        raise credentials_exception
-
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+        raise AuthError(detail="User not found.")
