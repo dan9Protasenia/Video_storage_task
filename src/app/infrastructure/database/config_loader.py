@@ -1,1 +1,3 @@
-DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost/flaskpostgre"
+import os
+
+POSTGRES_URL = os.getenv("POSTGRES_URL")
