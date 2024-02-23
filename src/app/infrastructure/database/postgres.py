@@ -3,11 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from src.app.core.handlers.errors import InternalServerError
-from src.app.infrastructure.database.config_loader import DATABASE_URL
+from src.app.infrastructure.database.config_loader import POSTGRES_URL
 
 Base = declarative_base()
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(POSTGRES_URL, echo=True)
 
 AsyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
 
